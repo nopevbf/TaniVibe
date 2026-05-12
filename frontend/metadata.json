@@ -1,0 +1,7 @@
+{
+  "name": "TaniVibe",
+  "description": "Smart Agricultural Early Warning System using real-time weather data and AI.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

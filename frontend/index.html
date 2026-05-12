@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaniVibe — Peringatan Dini Pertanian</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            tanivibe: {
+              bg: '#f5f2eb',
+              bg2: '#ece8de',
+              surface: '#fdfcf8',
+              ink: '#1c1a14',
+              ink2: '#4a4739',
+              ink3: '#8a8578',
+              border: '#ddd9ce',
+              green: '#2d6a4f',
+              'green-l': '#d8f0e4',
+              'green-m': '#74c69d',
+              yellow: '#b5820a',
+              'yellow-l': '#fef3cd',
+              red: '#9b2226',
+              'red-l': '#fde8e8',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['Fraunces', 'serif'],
+          },
+          borderRadius: {
+            'xl': '16px',
+          },
+          boxShadow: {
+            'subtle': '0 2px 10px rgba(0, 0, 0, 0.02)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #f5f2eb;
+      color: #1c1a14;
+    }
+    /* Custom scrollbar for chat */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ddd9ce;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8a8578;
+    }
+  </style>
+  </head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="./index.tsx"></script>
+<script type="module" src="/index.js"></script></body>
+</html>
