@@ -12,10 +12,10 @@ import rateLimit from 'express-rate-limit';
 import { WebSocketServer, WebSocket } from 'ws';
 
 const app = express();
-app.use(express.json({limit: process?.env?.API_PAYLOAD_MAX_SIZE || "7mb"}));
+app.use(express.json({ limit: process?.env?.API_PAYLOAD_MAX_SIZE || "7mb" }));
 
-const PORT = process?.env?.API_BACKEND_PORT || 5000;
-const API_BACKEND_HOST = process?.env?.API_BACKEND_HOST || "127.0.0.1";
+const PORT = process.env.PORT || process.env.API_BACKEND_PORT || 8080;
+const API_BACKEND_HOST = process.env.API_BACKEND_HOST || "0.0.0.0";
 
 const GOOGLE_CLOUD_LOCATION = process?.env?.GOOGLE_CLOUD_LOCATION;
 const GOOGLE_CLOUD_PROJECT = process?.env?.GOOGLE_CLOUD_PROJECT;
@@ -35,20 +35,20 @@ app.set('trust proxy', 1 /* number of proxies between user and server */);
 // This rate limiting configuration protects your backend APIs from abuse.
 // Removing it exposes your service to DoS attacks and unexpected costs.
 const proxyLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // Set ratelimit window at 15min (in ms)
-    max: 100, // Limit each IP to 100 requests per window 
-    standardHeaders: true, // Return rate limit info in the "RateLimit-*" headers
-    legacyHeaders: false, // no "X-RateLimit-*" headers
-    message: {
-      error: 'Too many requests',
-      message: 'You have exceed the request limit, please try again later.'
-    },
+  windowMs: 15 * 60 * 1000, // Set ratelimit window at 15min (in ms)
+  max: 100, // Limit each IP to 100 requests per window 
+  standardHeaders: true, // Return rate limit info in the "RateLimit-*" headers
+  legacyHeaders: false, // no "X-RateLimit-*" headers
+  message: {
+    error: 'Too many requests',
+    message: 'You have exceed the request limit, please try again later.'
+  },
 });
 // Apply the rate limiter to the /api-proxy route before the main proxy logic
 app.use('/api-proxy', proxyLimiter);
 
 const API_CLIENT_MAP = [
- {
+  {
     name: "VertexGenAi:generateContent",
     patternForProxy: "https://aiplatform.googleapis.com/{{version}}/publishers/google/models/{{model}}:generateContent",
     getApiEndpoint: (context, params) => {
@@ -57,7 +57,7 @@ const API_CLIENT_MAP = [
     isStreaming: false,
     transformFn: null,
   },
- {
+  {
     name: "VertexGenAi:predict",
     patternForProxy: "https://aiplatform.googleapis.com/{{version}}/publishers/google/models/{{model}}:predict",
     getApiEndpoint: (context, params) => {
@@ -66,7 +66,7 @@ const API_CLIENT_MAP = [
     isStreaming: false,
     transformFn: null,
   },
- {
+  {
     name: "VertexGenAi:streamGenerateContent",
     patternForProxy: "https://aiplatform.googleapis.com/{{version}}/publishers/google/models/{{model}}:streamGenerateContent",
     getApiEndpoint: (context, params) => {
@@ -74,32 +74,32 @@ const API_CLIENT_MAP = [
     },
     isStreaming: true,
     transformFn: (response) => {
-        let normalizedResponse = response.trim();
-        while (normalizedResponse.startsWith(',') || normalizedResponse.startsWith('[')) {
-          normalizedResponse = normalizedResponse.substring(1).trim();
-        }
-        while (normalizedResponse.endsWith(',') || normalizedResponse.endsWith(']')) {
-          normalizedResponse = normalizedResponse.substring(0, normalizedResponse.length - 1).trim();
-        }
+      let normalizedResponse = response.trim();
+      while (normalizedResponse.startsWith(',') || normalizedResponse.startsWith('[')) {
+        normalizedResponse = normalizedResponse.substring(1).trim();
+      }
+      while (normalizedResponse.endsWith(',') || normalizedResponse.endsWith(']')) {
+        normalizedResponse = normalizedResponse.substring(0, normalizedResponse.length - 1).trim();
+      }
 
-        if (!normalizedResponse.length) {
-          return {result: null, inProgress: false};
-        }
+      if (!normalizedResponse.length) {
+        return { result: null, inProgress: false };
+      }
 
-        if (!normalizedResponse.endsWith('}')) {
-          return {result: normalizedResponse, inProgress: true};
-        }
+      if (!normalizedResponse.endsWith('}')) {
+        return { result: normalizedResponse, inProgress: true };
+      }
 
-        try {
-          const parsedResponse = JSON.parse(`${normalizedResponse}`);
-          const transformedResponse = `data: ${JSON.stringify(parsedResponse)}\n\n`;
-          return {result: transformedResponse, inProgress: false};
-        } catch (error) {
-          throw new Error(`Failed to parse response: ${error}.`);
-        }
+      try {
+        const parsedResponse = JSON.parse(`${normalizedResponse}`);
+        const transformedResponse = `data: ${JSON.stringify(parsedResponse)}\n\n`;
+        return { result: transformedResponse, inProgress: false };
+      } catch (error) {
+        throw new Error(`Failed to parse response: ${error}.`);
+      }
     },
   },
- {
+  {
     name: "ReasoningEngine:query",
     patternForProxy: "https://{{endpoint_location}}-aiplatform.googleapis.com/{{version}}/projects/{{project_id}}/locations/{{location_id}}/reasoningEngines/{{engine_id}}:query",
     getApiEndpoint: (context, params) => {
@@ -108,7 +108,7 @@ const API_CLIENT_MAP = [
     isStreaming: false,
     transformFn: null,
   },
- {
+  {
     name: "ReasoningEngine:streamQuery",
     patternForProxy: "https://{{endpoint_location}}-aiplatform.googleapis.com/{{version}}/projects/{{project_id}}/locations/{{location_id}}/reasoningEngines/{{engine_id}}:streamQuery",
     getApiEndpoint: (context, params) => {
@@ -146,7 +146,7 @@ function parsePattern(pattern) {
   parts.push(escapeRegex(pattern.substring(lastIndex)));
   const regexString = parts.join('');
 
-  return {regex: new RegExp(`^${regexString}$`), params};
+  return { regex: new RegExp(`^${regexString}$`), params };
 }
 
 function extractParams(patternInfo, url) {
@@ -220,7 +220,7 @@ app.post('/api-proxy', async (req, res) => {
     if (!accessToken) return;
 
     // 3. Construct the full API URL using env-set GOOGLE_CLOUD_PROJECT/LOCATION and extracted params
-    const context = {projectId: GOOGLE_CLOUD_PROJECT, region: GOOGLE_CLOUD_LOCATION};
+    const context = { projectId: GOOGLE_CLOUD_PROJECT, region: GOOGLE_CLOUD_LOCATION };
     const apiUrl = apiClient.getApiEndpoint(context, extractedParams);
     console.log(`[Node Proxy] Forwarding to Vertex API: ${apiUrl}`);
 
@@ -229,7 +229,7 @@ app.post('/api-proxy', async (req, res) => {
 
     const apiFetchOptions = {
       method: method || 'POST',
-      headers: {...apiHeaders, ...headers},
+      headers: { ...apiHeaders, ...headers },
       body: body ? body : undefined,
     };
 
@@ -265,7 +265,7 @@ app.post('/api-proxy', async (req, res) => {
             const decodedChunk = decoder.decode(encodedChunk, { stream: true });
             deltaChunk = deltaChunk + decodedChunk;
 
-            const {result, inProgress} = apiClient.transformFn(deltaChunk);
+            const { result, inProgress } = apiClient.transformFn(deltaChunk);
             if (result && !inProgress) {
               deltaChunk = '';
               res.write(new TextEncoder().encode(result));
@@ -294,7 +294,7 @@ app.post('/api-proxy', async (req, res) => {
         console.error('[Node Proxy] Error writing to client response:', resError);
         // The source stream might need to be destroyed if an error occurs here.
         if (apiResponse.body && typeof apiResponse.body.destroy === 'function') {
-             apiResponse.body.destroy(resError);
+          apiResponse.body.destroy(resError);
         }
       });
     } else {
@@ -311,7 +311,7 @@ app.post('/api-proxy', async (req, res) => {
 });
 
 const server = app.listen(PORT, API_BACKEND_HOST, () => {
-  console.log(`Vertex AI Backend listening at http://localhost:${PORT}`);
+  console.log(`Vertex AI Backend listening on ${API_BACKEND_HOST}:${PORT}`);
 });
 
 
@@ -321,7 +321,7 @@ server.on('upgrade', async (request, socket, head) => {
   const url = new URL(request.url, `http://${request.headers.host}`);
 
   if (url.pathname === '/ws-proxy') {
-    
+
     let targetUrl = url.searchParams.get('target');
     if (!targetUrl) {
       console.log('[Node Proxy] Missing target URL');
