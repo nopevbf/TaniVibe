@@ -1,67 +1,85 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { MapPin, Sun, MessageSquare, RefreshCw, Database, AlertTriangle } from 'lucide-react';
+import { Radio, Sun, MessageSquare, RefreshCw, Database, AlertOctagon, CheckCircle2, AlertTriangle } from 'lucide-react';
 
 const GuidePanel: React.FC = () => {
-  const guides = [
-    {
-      icon: <MapPin className="w-7 h-7 text-tanivibe-green" />,
-      title: "1. Aktifkan Lokasi",
-      desc: "Klik tombol 'Lokasi Saya' untuk mendeteksi posisi Anda secara otomatis. Pastikan browser mengizinkan akses lokasi. Data lokasi hanya digunakan untuk mengambil cuaca — tidak disimpan."
-    },
-    {
-      icon: <Sun className="w-7 h-7 text-tanivibe-yellow" />,
-      title: "2. Baca Level Risiko",
-      desc: "🟢 AMAN — Kondisi baik untuk kegiatan pertanian normal.\n🟡 WASPADA — Ada potensi risiko, ikuti saran yang diberikan.\n🔴 BAHAYA — Ambil tindakan perlindungan segera."
-    },
-    {
-      icon: <MessageSquare className="w-7 h-7 text-tanivibe-green" />,
-      title: "3. Tanya Langsung",
-      desc: "Gunakan fitur Tanya untuk bertanya tentang hama, pupuk, jadwal tanam, atau masalah pertanian lainnya. AI akan menjawab dengan bahasa sederhana yang mudah dipahami."
-    },
-    {
-      icon: <RefreshCw className="w-7 h-7 text-tanivibe-ink2" />,
-      title: "4. Perbarui Berkala",
-      desc: "Data cuaca diperbarui secara real-time. Disarankan cek TaniVibe setiap pagi sebelum memulai aktivitas pertanian dan sore hari untuk antisipasi besok."
-    },
-    {
-      icon: <Database className="w-7 h-7 text-tanivibe-ink3" />,
-      title: "Sumber Data",
-      desc: "Data cuaca dari Open-Meteo API (prakiraan cuaca global resolusi tinggi, gratis). Analisis dilakukan oleh Gemini 2.5 Flash dari Google AI."
-    },
-    {
-      icon: <AlertTriangle className="w-7 h-7 text-tanivibe-red" />,
-      title: "Catatan Penting",
-      desc: "TaniVibe adalah alat bantu pengambilan keputusan. Untuk kondisi darurat atau keputusan besar, selalu konsultasikan dengan penyuluh pertanian setempat dan pantau BMKG."
-    }
-  ];
-
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      className="max-w-5xl mx-auto p-4 md:p-8"
-    >
-      <div className="mb-8">
-        <h2 className="font-serif text-2xl md:text-3xl font-semibold text-tanivibe-ink mb-2">Cara Menggunakan TaniVibe</h2>
-        <p className="text-sm text-tanivibe-ink3 leading-relaxed">Panduan singkat untuk memaksimalkan manfaat sistem peringatan dini ini.</p>
+    <div className="max-w-4xl mx-auto p-6 md:p-10 w-full">
+      <div className="mb-10">
+        <h2 className="font-serif text-3xl font-semibold text-tanivibe-ink mb-3">Cara Menggunakan TaniVibe</h2>
+        <p className="text-base text-tanivibe-ink2 leading-relaxed max-w-2xl">
+          TaniVibe dirancang sederhana agar mudah digunakan di lapangan. Berikut adalah langkah-langkah untuk memaksimalkan manfaat sistem ini.
+        </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-        {guides.map((guide, idx) => (
-          <div key={idx} className="bg-tanivibe-surface border border-tanivibe-border rounded-xl p-6 shadow-subtle hover:shadow-md transition-shadow">
-            <div className="mb-4 bg-tanivibe-bg2 w-12 h-12 rounded-lg flex items-center justify-center">
-              {guide.icon}
-            </div>
-            <h3 className="font-serif text-lg font-semibold text-tanivibe-ink mb-2">{guide.title}</h3>
-            <p className="text-sm text-tanivibe-ink3 leading-relaxed whitespace-pre-line">
-              {guide.desc}
-            </p>
-          </div>
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* Card 1 */}
+        <div className="bg-white border border-tanivibe-border rounded-2xl p-6 shadow-sm">
+          <Radio className="w-6 h-6 text-tanivibe-ink2 mb-4" />
+          <h3 className="font-serif text-lg font-semibold text-tanivibe-ink mb-2">1. Aktifkan Lokasi</h3>
+          <p className="text-sm text-tanivibe-ink2 leading-relaxed">
+            Klik tombol 'Lokasi Saya' agar sistem mendeteksi posisi Anda. Ini penting untuk mengambil data cuaca yang benar-benar akurat di desa Anda.
+          </p>
+        </div>
+
+        {/* Card 2 */}
+        <div className="bg-white border border-tanivibe-border rounded-2xl p-6 shadow-sm">
+          <Sun className="w-6 h-6 text-tanivibe-ink2 mb-4" />
+          <h3 className="font-serif text-lg font-semibold text-tanivibe-ink mb-2">2. Baca Level Risiko</h3>
+          <ul className="space-y-3 mt-3">
+            <li className="flex items-start gap-2 text-sm text-tanivibe-ink2 leading-relaxed">
+              <CheckCircle2 className="w-4 h-4 text-tanivibe-green shrink-0 mt-0.5" />
+              <span><strong className="text-tanivibe-green">Hijau (AMAN)</strong> berarti lanjut bertani seperti biasa.</span>
+            </li>
+            <li className="flex items-start gap-2 text-sm text-tanivibe-ink2 leading-relaxed">
+              <AlertTriangle className="w-4 h-4 text-tanivibe-yellow shrink-0 mt-0.5" />
+              <span><strong className="text-tanivibe-yellow">Kuning (WASPADA)</strong> berarti ada potensi gangguan.</span>
+            </li>
+            <li className="flex items-start gap-2 text-sm text-tanivibe-ink2 leading-relaxed">
+              <AlertOctagon className="w-4 h-4 text-tanivibe-red shrink-0 mt-0.5" />
+              <span><strong className="text-tanivibe-red">Merah (BAHAYA)</strong> berarti harus ada tindakan penyelamatan tanaman segera.</span>
+            </li>
+          </ul>
+        </div>
+
+        {/* Card 3 */}
+        <div className="bg-white border border-tanivibe-border rounded-2xl p-6 shadow-sm">
+          <MessageSquare className="w-6 h-6 text-tanivibe-ink2 mb-4" />
+          <h3 className="font-serif text-lg font-semibold text-tanivibe-ink mb-2">3. Konsultasi AI</h3>
+          <p className="text-sm text-tanivibe-ink2 leading-relaxed">
+            Gunakan tab Tanya jika ragu. Anda bisa bertanya tentang takaran pupuk saat hujan lebat atau cara menangani hama yang tiba-tiba muncul.
+          </p>
+        </div>
+
+        {/* Card 4 */}
+        <div className="bg-white border border-tanivibe-border rounded-2xl p-6 shadow-sm">
+          <RefreshCw className="w-6 h-6 text-tanivibe-ink2 mb-4" />
+          <h3 className="font-serif text-lg font-semibold text-tanivibe-ink mb-2">4. Cek Berkala</h3>
+          <p className="text-sm text-tanivibe-ink2 leading-relaxed">
+            Cuaca berubah cepat. Kami sarankan mengecek TaniVibe setiap pagi sebelum ke sawah dan sore hari untuk persiapan esok.
+          </p>
+        </div>
+
+        {/* Card 5 - Sumber Data */}
+        <div className="bg-[#eef1e8] border border-[#dce2d4] rounded-2xl p-6">
+          <h3 className="text-xs font-bold tracking-wider text-tanivibe-green uppercase mb-3 flex items-center gap-2">
+            <Database className="w-4 h-4" /> SUMBER DATA
+          </h3>
+          <p className="text-sm text-tanivibe-ink2 leading-relaxed">
+            Data cuaca diambil secara real-time dari <strong>Open-Meteo API</strong> (gratis & presisi tinggi). Analisis cerdas dilakukan oleh <strong>Mesin AI</strong> untuk memberikan interpretasi bahasa manusia yang relevan bagi petani di Indonesia.
+          </p>
+        </div>
+
+        {/* Card 6 - Catatan Penting */}
+        <div className="bg-[#fdf2f2] border border-[#fce4e4] rounded-2xl p-6">
+          <h3 className="text-xs font-bold tracking-wider text-tanivibe-red uppercase mb-3 flex items-center gap-2">
+            <AlertOctagon className="w-4 h-4" /> CATATAN PENTING
+          </h3>
+          <p className="text-sm text-tanivibe-ink2 leading-relaxed">
+            TaniVibe adalah alat bantu cerdas. Untuk keputusan yang melibatkan investasi besar, harap tetap berkonsultasi dengan penyuluh pertanian atau memantau papan informasi BMKG setempat.
+          </p>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

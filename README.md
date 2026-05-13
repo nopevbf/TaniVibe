@@ -1,53 +1,67 @@
-# Vertex AI Studio Frontend App with Node.js Backend
+# TaniVibe 🌿
 
-This repository contains a frontend and a Node.js backend, designed to run together.
-The backend acts as a proxy, handling Google Cloud API calls.
+**TaniVibe** adalah "Sahabat Pintar Petani Indonesia" — sebuah aplikasi asisten pertanian cerdas yang menggabungkan data cuaca real-time dengan kecerdasan buatan (AI) untuk membantu petani mengambil keputusan yang lebih tepat.
 
-This project is intended for demonstration and prototyping purposes only.
-It is not intended for use in a production environment.
+Aplikasi ini menggunakan teknologi **Google Cloud Vertex AI** untuk menganalisis risiko pertanian dan memberikan saran praktis dalam bahasa yang mudah dimengerti oleh masyarakat luas.
 
-## Prerequisites
+## ✨ Fitur Utama
 
-To run this application locally, you need:
+- 🌤️ **Pemantauan Cuaca Presisi**: Mendapatkan data suhu, curah hujan, dan angin secara real-time berdasarkan lokasi GPS atau nama desa.
+- 🤖 **Analisis Risiko AI**: Deteksi dini risiko banjir, kekeringan, dan ancaman cuaca lainnya berdasarkan pola meteorologi terbaru.
+- 💧 **Rekomendasi Irigasi**: Saran cerdas kapan harus menyiram atau menjaga saluran drainase berdasarkan prediksi hujan.
+- 💬 **Konsultasi AI (Tanya TaniVibe)**: Chat asisten AI yang memahami sejarah dan kondisi lahan Anda untuk menjawab masalah pertanian harian.
+- 🗓️ **Prediksi 3 Hari ke Depan**: Membantu perencanaan kerja tani (seperti pemupukan atau panen) untuk beberapa hari mendatang.
 
-*   **[Google Cloud SDK / gcloud CLI](https://cloud.google.com/sdk/docs/install)**: Follow the instructions to install the SDK.
+## 🚀 Teknologi yang Digunakan
 
-*   **gcloud Initialization**:
-    *   Initialize the gcloud CLI:
-        ```bash
-        gcloud init
-        ```
-    *   Authenticate for Application Default Credentials (needed to call Google Cloud APIs):
-        ```bash
-        gcloud auth application-default login
-        ```
+- **Frontend**: React, TypeScript, Vite, Framer Motion, Lucide React.
+- **Backend**: Node.js & Express (sebagai proxy aman untuk Vertex AI).
+- **AI Engine**: Google Cloud Vertex AI (Gemini 1.5 Flash).
+- **Data Cuaca**: Open-Meteo API.
 
-*   **Node.js and npm**: Ensure you have Node.js and its package manager, `npm`, installed on your machine.
+## 🔧 Instalasi dan Persiapan
 
-## Project Structure
+### Prasyarat
+- **Node.js & npm** terinstal di mesin Anda.
+- **Google Cloud SDK (gcloud CLI)** untuk autentikasi.
+- Proyek Google Cloud dengan **Vertex AI API** yang sudah diaktifkan.
 
-The project is organized into two main directories:
+### Langkah-langkah
+1. **Clone repository**:
+   ```bash
+   git clone <repo-url>
+   cd TaniVibe
+   ```
 
-*   `frontend/`: Contains the Frontend application code.
-*   `backend/`: Contains the Node.js/Express server code to proxy Google Cloud API calls.
+2. **Instal dependensi**:
+   Instal semua paket yang diperlukan di root, frontend, dan backend:
+   ```bash
+   npm install
+   ```
 
-## Backend Environment Variables
+3. **Autentikasi Google Cloud**:
+   Pastikan Anda sudah login ke akun Google Cloud Anda:
+   ```bash
+   gcloud auth application-default login
+   ```
 
-The `backend/.env.local` file is automatically generated when you download this application.
-It contains essential Google Cloud environment variables pre-configured based on your project settings at the time of download.
+4. **Konfigurasi Environment**:
+   Pastikan file `backend/.env.local` sudah berisi Project ID dan Lokasi Google Cloud Anda.
 
-The variables set in `backend/.env.local` are:
-*   `API_BACKEND_PORT`: The port the backend API server listens on (e.g., `5000`).
-*   `API_PAYLOAD_MAX_SIZE`: The maximum size of the request payload accepted by the backend server (e.g., `5mb`).
-*   `GOOGLE_CLOUD_LOCATION`: The Google Cloud region associated with your project.
-*   `GOOGLE_CLOUD_PROJECT`: Your Google Cloud Project ID.
+5. **Jalankan Aplikasi**:
+   Jalankan frontend dan backend secara bersamaan dalam mode pengembangan:
+   ```bash
+   npm run dev
+   ```
 
-**Note:** These variables are automatically populated during the download process.
-You can modify the values in `backend/.env.local` if you need to change them.
+## 📖 Cara Penggunaan
+1. Buka aplikasi di browser (biasanya di `http://localhost:5173`).
+2. Masukkan nama desa Anda atau klik **Lokasi Saya** untuk deteksi otomatis.
+3. Klik **Analisis** untuk mendapatkan laporan risiko cuaca dari AI.
+4. Gunakan tab **Tanya** untuk berkonsultasi lebih lanjut mengenai hasil analisis tersebut.
 
-## Installation and Running the App
+## 📋 Changelog
+Lihat riwayat perubahan selengkapnya di [CHANGELOG.md](./CHANGELOG.md).
 
-To install dependencies and run your Google Cloud Vertex AI Studio App locally, execute the following command:
-
-```bash
-npm install && npm run dev
+## 📄 Lisensi
+Copyright © 2026 TaniVibe Team. Dibuat untuk mendukung ketahanan pangan dan kemajuan pertanian Indonesia.

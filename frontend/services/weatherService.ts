@@ -10,3 +10,21 @@ export const fetchWeatherData = async (lat: number, lon: number): Promise<Weathe
   
   return await response.json();
 };
+
+export const fetchCoordinates = async (name: string): Promise<{lat: number, lon: number, name: string}> => {
+  const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=1&language=id&format=json`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error('Gagal mencari lokasi');
+  }
+  const data = await response.json();
+  if (!data.results || data.results.length === 0) {
+    throw new Error('Lokasi tidak ditemukan. Coba nama yang lebih spesifik.');
+  }
+  const result = data.results[0];
+  return {
+    lat: result.latitude,
+    lon: result.longitude,
+    name: result.name + (result.admin1 ? `, ${result.admin1}` : '')
+  };
+};

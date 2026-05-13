@@ -40,4 +40,49 @@ export interface ChatMessage {
   id: string;
   role: 'user' | 'model';
   text: string;
+  isWelcome?: boolean;
+  /** Opsional: gambar yang dilampirkan user, disimpan sebagai base64 data URL */
+  image?: {
+    base64: string;       // base64 murni tanpa prefix
+    mimeType: 'image/jpeg' | 'image/png' | 'image/webp' | 'image/gif';
+    previewUrl: string;   // data URL lengkap untuk ditampilkan di UI
+  };
 }
+
+/**
+ * Menyimpan fakta-fakta penting yang diketahui tentang petani & lahannya.
+ */
+export interface FarmMemory {
+  location: string | null;
+  cropTypes: string[];
+  cropAges: Record<string, string>;
+  fieldNotes: string[];
+  lastWeatherAnalysis: {
+    timestamp: string;
+    location: string;
+    riskLevel: string;
+    summary: string;
+    mainWarning: string;
+    irrigationRecommendation: string;
+  } | null;
+  reportedSymptoms: string[];
+  handledIssues: string[];
+  conversationSummary: string;
+  summaryUpdatedAt: string | null;
+  sessionCount: number;
+  lastActiveAt: string | null;
+}
+
+export const DEFAULT_FARM_MEMORY: FarmMemory = {
+  location: null,
+  cropTypes: [],
+  cropAges: {},
+  fieldNotes: [],
+  lastWeatherAnalysis: null,
+  reportedSymptoms: [],
+  handledIssues: [],
+  conversationSummary: '',
+  summaryUpdatedAt: null,
+  sessionCount: 0,
+  lastActiveAt: null,
+};
